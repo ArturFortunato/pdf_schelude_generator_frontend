@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import itertools
 import re
+import math
 
 class turno:
     def __init__(self, course):
@@ -129,9 +130,37 @@ def get_after_digits(class_name):
 def generate_all_schedules(courses_schedules):
     return list(itertools.product(*courses_schedules))
 
+def is_possible(schedule):
+    mounted_schedule = {'2.a': [], '3.a': [], '4.a': [], '5.a': [], '6.a': [], 'Sáb': []}
+
+    for course in schedule:
+        time = course.time 
+        for shift in time:
+            for day in shift[0]:
+                if type(shift[0][day]) != float and has_colision(shift[0][day], mounted_schedule[day]):
+                    return False
+                mounted_schedule[day] += [shift[0][day]]
+    return True
+
+def has_colision(new, occupied):
+    if occupied == []:
+        return False
+    [start, end] = new.split('-')
+    for filled in occupied:
+        if type(filled) == float and math.isnan(filled):
+            continue
+        [filled_start, filled_end] = filled.split('-')
+        if start >= filled_start and start < filled_end:
+            return True
+        elif end > filled_start and end <= filled_end:
+            return True
+        elif start < filled_start and end > filled_end:
+            return True
+    return False
+
+
 def remove_impossible_schedules(schedules):
-    # TODO
-    return schedules
+    return [schedule for schedule in schedules if is_possible(schedule)]
 
 link = 'https://www.letras.ulisboa.pt/pt/documentos/cursos/-1/6781--2702/file'
 courses = ['Inglês Vantagem Avançado (B2.2)', 'Cultura Clássica']
@@ -151,7 +180,6 @@ classes = generate_groups_for_combinations(filtered_schedule)
 classes = split_bifurcated_classes(classes)
 full_list_schedules = generate_all_schedules(classes)
 schedules = remove_impossible_schedules(full_list_schedules)
-
 
 ##############################################################
 ###################### END TEMP ZONE #########################
