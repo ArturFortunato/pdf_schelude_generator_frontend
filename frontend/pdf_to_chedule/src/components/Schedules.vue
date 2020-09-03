@@ -33,32 +33,35 @@
 import axios from 'axios'
 
 export default {
-  name: 'Schedules',
-  data: () => ({
-    weekdays: [1,2,3,4,5],
-    focus: '2020-09-01',
-    events: [],
-    schedules: {},
-    current_schedule: 0
-  }),
-  methods: {
-    next() {
-      this.events = this.schedules[this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1]
-      this.current_schedule = this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1
+    name: 'Schedules',
+    props: {
+        courses: Array
     },
-    previous() {
-      this.events = this.schedules[this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1]
-      this.current_schedule = this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1
+    data: () => ({
+        weekdays: [1,2,3,4,5],
+        focus: '2020-09-01',
+        events: [],
+        schedules: {},
+        current_schedule: 0
+    }),
+    methods: {
+        next() {
+        this.events = this.schedules[this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1]
+        this.current_schedule = this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1
+        },
+        previous() {
+        this.events = this.schedules[this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1]
+        this.current_schedule = this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1
+        }
+    },
+    mounted () {
+        axios
+        .get('http://localhost:5000/schedule', {params: {courses: this.courses}})
+        .then(response => {
+            this.events = response.data[0]
+            this.schedules = response.data
+        })
     }
-  },
-  mounted () {
-    axios
-      .get('http://localhost:5000/schedule?courses=xyz')
-      .then(response => {
-        this.events = response.data[0]
-        this.schedules = response.data
-      })
-  }
 }
 </script>
 
