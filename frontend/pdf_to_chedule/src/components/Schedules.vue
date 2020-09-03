@@ -55,7 +55,7 @@ export default {
     },
     mounted () {
         axios
-        .post('http://localhost:5000/schedule',  
+        .post('http://127.0.0.1:5000/schedule',  
             {courses: this.courses}, 
             {headers: {'Content-type': 'application/json'}}
         )
