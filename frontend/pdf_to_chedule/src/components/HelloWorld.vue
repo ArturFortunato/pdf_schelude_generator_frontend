@@ -1,58 +1,124 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-app>
+    <v-row>
+      <v-col xs="1" sm="1" md="1" lg="1" class="sticky max-height-100">
+        <v-btn @click="previous" class="vertical-center left-50">Previous</v-btn>
+      </v-col>
+      <v-col xs="10" sm="10" md="10" lg="10" offset-xs="1" offset-sm="1" offset-md="1" offset-lg="1" offset-xl="1">          
+        <v-calendar
+          ref="calendar"
+          type="week"
+          :now="focus"
+          first-time=8
+          interval-minutes=30
+          interval-count=25
+          :events="events"
+          :weekdays="weekdays"
+        >
+          <template v-slot:event="{event}">
+              <div :style="{'background-color':event.color,color:'white'}" class="fill-height pl-2">{{ event.name }}</div>
+          </template>
+        </v-calendar>
+      </v-col>
+      <v-col xs="1" sm="1" md="1" lg="1" class="sticky max-height-100 right-0">
+        <v-btn @click="next" class="vertical-center left-50">Next</v-btn>
+      </v-col>
+
+    </v-row>
+  </v-app>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  name: 'Schedules',
+  data: () => ({
+    weekdays: [1,2,3,4,5],
+    focus: '2020-09-01',
+    events: [],
+    schedules: {},
+    current_schedule: 0
+  }),
+  methods: {
+    next() {
+      this.events = this.schedules[this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1]
+      this.current_schedule = this.current_schedule == Object.keys(this.schedules).length - 1 ? 0 : this.current_schedule + 1
+    },
+    previous() {
+      this.events = this.schedules[this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1]
+      this.current_schedule = this.current_schedule == 0 ? Object.keys(this.schedules).length - 1 : this.current_schedule - 1
+    }
+  },
+  mounted () {
+    axios
+      .get('http://localhost:5000/schedule')
+      .then(response => {
+        this.events = response.data[0]
+        this.schedules = response.data
+      })
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style lang="scss">
+  .my-event {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 2px;
+    background-color: #1867c0;
+    color: #ffffff;
+    border: 1px solid #1867c0;
+    font-size: 12px;
+    padding: 3px;
+    cursor: pointer;
+    margin-bottom: 1px;
+    left: 4px;
+    margin-right: 8px;
+    position: relative;
+
+    &.with-time {
+      position: absolute;
+      right: 4px;
+      margin-right: 0px;
+    }
+  }
+
+  .v-calendar-daily_head-day-label {
+    //display: none !important;
+  }
+
+  .border-red {
+    border: 2px solid red;
+  }
+
+  .vertical-center {
+    margin: 0;
+    position: fixed;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .left-50
+  {
+    left: 50%;
+  }
+
+  .right-0
+  {
+    right: 0;
+  }
+
+  .max-height-100
+  {
+    height: 100vh;
+    max-height: 100vh !important;
+  }
+
+  .sticky
+  {
+    position:fixed;
+  }
 </style>
