@@ -5,6 +5,7 @@ import pandas as pd
 import itertools
 import re
 import math
+import json
 
 class turno:
     def __init__(self, course):
@@ -19,6 +20,37 @@ class turno:
         for time in self.time:
             print("Turno:", time[1])
             print("Horário:", time[0])
+
+    def to_frontend_time(self, day, time):
+        weekday_to_frontend = {
+            '2.a': '2020-08-31',
+            '3.a': '2020-09-01',
+            '4.a': '2020-09-02',
+            '5.a': '2020-09-03',
+            '6.a': '2020-09-04',
+            'Sáb': '2020-09-05',
+        }
+
+        return "{} {}:00".format(weekday_to_frontend[day], time) 
+
+    def time_to_jsons(self, time):
+        to_return = []
+        for day in time[0]:
+            # Ignores nan (NotANumber)
+            if type(time[0][day]) != float:
+                to_return += [json.dumps({
+                    'name':  self.course + "(" + time[1] + ")",
+                    'start': self.to_frontend_time(day, time[0][day].split('-')[0]),
+                    'end':   self.to_frontend_time(day, time[0][day].split('-')[1]),
+                    'color': 'red' 
+                })]
+        return to_return
+
+    def to_json(self):
+        to_return = []
+        for time in self.time:
+            to_return += self.time_to_jsons(time)
+        return to_return
 
 def download_file(link):
     filename = wget.download(link)
@@ -162,28 +194,20 @@ def has_colision(new, occupied):
 def remove_impossible_schedules(schedules):
     return [schedule for schedule in schedules if is_possible(schedule)]
 
+def schedules_to_json(schedules):
+    new_schedules = {}
+    i = 0
+    for schedule in schedules:
+        new_schedules[i] = []
+        for shift in schedule:
+            new_schedules[i] += shift.to_json()
+        i += 1
+
+    return json.dumps(new_schedules)
+
 link = 'https://www.letras.ulisboa.pt/pt/documentos/cursos/-1/6781--2702/file'
 courses = ['Inglês Vantagem Avançado (B2.2)', 'Cultura Clássica']
 semester = 'S1'
-
-##############################################################
-########## TEMP ZONE - GET DIFFERENT TABLE READER ############
-##############################################################
-
-filename = 'Horarios-Licenciaturas-2020-2021-v07.pdf' #download_file(link)
-#csv_file = pdf_to_csv(filename)
-
-full_schedule = read_csv('schedule.csv')
-filtered_schedule = filter_schedule(full_schedule, courses, semester)
-
-classes = generate_groups_for_combinations(filtered_schedule)
-classes = split_bifurcated_classes(classes)
-full_list_schedules = generate_all_schedules(classes)
-schedules = remove_impossible_schedules(full_list_schedules)
-
-##############################################################
-###################### END TEMP ZONE #########################
-##############################################################
 
 
 def main():
@@ -221,5 +245,7 @@ def temp_main(temp_courses):
     classes = split_bifurcated_classes(classes)
     full_list_schedules = generate_all_schedules(classes)
     schedules = remove_impossible_schedules(full_list_schedules)
-
+    schedules = schedules_to_json(schedules)
     return schedules
+
+temp_main(courses)
