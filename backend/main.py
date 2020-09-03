@@ -212,3 +212,14 @@ def main():
     schedules = remove_impossible_schedules(full_list_schedules)
 
     return schedules
+
+def temp_main(temp_courses):
+    full_schedule = read_csv('schedule.csv')
+    filtered_schedule = filter_schedule(full_schedule, temp_courses, semester)
+
+    classes = generate_groups_for_combinations(filtered_schedule)
+    classes = split_bifurcated_classes(classes)
+    full_list_schedules = generate_all_schedules(classes)
+    schedules = remove_impossible_schedules(full_list_schedules)
+
+    return schedules
