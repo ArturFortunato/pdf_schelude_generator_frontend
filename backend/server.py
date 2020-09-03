@@ -8,11 +8,9 @@ app.config["DEBUG"] = True
 flask_cors.CORS(app)
 
 
-@app.route('/schedule', methods=['GET'])
+@app.route('/schedule', methods=['POST'])
 def home():
-    schedules = temp_main(['Inglês Vantagem Avançado (B2.2)', 'Cultura Clássica'])
-    #Should receive a string with the courses comma separated
-    print("This", flask.request.args.get('courses'))
+    schedules = temp_main(flask.request.get_json()['courses'])
     return schedules
 
 app.run()

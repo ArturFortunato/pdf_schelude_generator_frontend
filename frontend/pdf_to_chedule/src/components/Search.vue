@@ -19,12 +19,11 @@
                     label="Course..."
                     single-line
                     outlined
-                    append-icon="mdi-open-in-new"
                     @keydown="teste"
                     v-model="input"
                 >
                 </v-text-field>
-                <router-link :to=generateLink()>
+                <router-link to='/schedules'>
                     <v-btn color="primary">Generate Schedules!</v-btn>
                 </router-link>
             </div>
@@ -53,14 +52,11 @@ export default {
         const index = this.courses.indexOf(course);
         this.courses.splice(index, 1);
     },
-    generateLink() {
-        return "/schedules/" + this.courses.join("&")
-    }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .border-red {
     border: 2px solid red;
   }

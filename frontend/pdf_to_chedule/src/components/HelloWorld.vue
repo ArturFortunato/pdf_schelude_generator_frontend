@@ -52,7 +52,7 @@ export default {
   },
   mounted () {
     axios
-      .get('http://localhost:5000/schedule?courses=xyz')
+      .get('http://localhost:5000/schedule')
       .then(response => {
         this.events = response.data[0]
         this.schedules = response.data

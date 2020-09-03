@@ -17,7 +17,7 @@ const routes = [
     component: Search
   },
   { 
-    path: '/schedules/:courses',
+    path: '/schedules',
     component: Schedules,
     props: {
       default: true

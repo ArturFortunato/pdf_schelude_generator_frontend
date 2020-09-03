@@ -7,7 +7,9 @@
     >
       <div class="d-flex align-center">
         <div>
-          <h1>Schedule Generator</h1>
+          <router-link to="/" class="text-white">
+            <h1>Schedule Generator</h1>
+          </router-link>
         </div>
       </div>
 
@@ -20,8 +22,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
     name: 'Schedules',
     data: () => ({
@@ -31,14 +31,6 @@ export default {
         updateCourses(courses) {
           this.courses = courses
         },
-    },
-    mounted () {
-        axios
-        .get('http://localhost:5000/schedule?courses=xyz')
-        .then(response => {
-            this.events = response.data[0]
-            this.schedules = response.data
-        })
     }
 }
 </script>
@@ -63,5 +55,11 @@ export default {
       color: #42b983;
     }
   }
+}
+
+.text-white
+{
+  color: white !important;
+  text-decoration: none;
 }
 </style>
