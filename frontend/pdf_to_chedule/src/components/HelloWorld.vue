@@ -50,7 +50,7 @@ export default {
   mounted () {
     axios
       .get('http://localhost:5000/schedule?courses=xyz')
-      .then(response => {console.log(response.data); this.events = response.data[0];})
+      .then(response => (this.events = response.data[0]))
   }
 }
 </script>

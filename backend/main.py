@@ -38,12 +38,12 @@ class turno:
         for day in time[0]:
             # Ignores nan (NotANumber)
             if type(time[0][day]) != float:
-                to_return += [json.dumps({
+                to_return += [{
                     'name':  self.course + "(" + time[1] + ")",
                     'start': self.to_frontend_time(day, time[0][day].split('-')[0]),
                     'end':   self.to_frontend_time(day, time[0][day].split('-')[1]),
                     'color': 'red' 
-                })]
+                }]
         return to_return
 
     def to_json(self):
@@ -247,5 +247,3 @@ def temp_main(temp_courses):
     schedules = remove_impossible_schedules(full_list_schedules)
     schedules = schedules_to_json(schedules)
     return schedules
-
-temp_main(courses)
