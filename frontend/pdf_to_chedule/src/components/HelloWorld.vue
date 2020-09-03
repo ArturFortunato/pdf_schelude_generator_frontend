@@ -18,34 +18,41 @@
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
-    data: () => ({
-      weekdays: [1,2,3,4,5],
-      focus: '2020-09-01',
-      events:
-      [
-        {
-          name: 'test',
-          start: '2020-09-01 10:00:00',
-          end: '2020-09-01 11:30:00',
-          color: 'red',
-        },
-        {
-          name: 'test',
-          start: '2020-09-02 10:00:00',
-          end: '2020-09-02 11:30:00',
-          color: 'red',
-        },
-        {
-          name: 'test',
-          start: '2020-09-03 10:00:00',
-          end: '2020-09-03 11:30:00',
-          color: 'red',
-        },
-      ]
-    }),
+import axios from 'axios'
+
+export default {
+  name: 'HelloWorld',
+  data: () => ({
+    weekdays: [1,2,3,4,5],
+    focus: '2020-09-01',
+    events:
+    [
+      {
+        name: 'test',
+        start: '2020-09-01 10:00:00',
+        end: '2020-09-01 11:30:00',
+        color: 'red',
+      },
+      {
+        name: 'test',
+        start: '2020-09-02 10:00:00',
+        end: '2020-09-02 11:30:00',
+        color: 'red',
+      },
+      {
+        name: 'test',
+        start: '2020-09-03 10:00:00',
+        end: '2020-09-03 11:30:00',
+        color: 'red',
+      },
+    ]
+  }),
+  mounted () {
+    axios
+      .get('http://localhost:5000/schedule?courses=xyz')
+      .then(response => {console.log(response.data); this.events = response.data[0];})
   }
+}
 </script>
 
 <style lang="scss">
