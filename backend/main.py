@@ -39,7 +39,7 @@ class turno:
             # Ignores nan (NotANumber)
             if type(time[0][day]) != float:
                 to_return += [{
-                    'name':  self.course + "(" + time[1] + ")",
+                    'name':  self.course + " (" + time[1] + ")",
                     'start': self.to_frontend_time(day, time[0][day].split('-')[0]),
                     'end':   self.to_frontend_time(day, time[0][day].split('-')[1]),
                     'color': 'red' 

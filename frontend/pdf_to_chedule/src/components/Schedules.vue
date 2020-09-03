@@ -2,7 +2,7 @@
   <v-app>
     <v-row>
       <v-col xs="1" sm="1" md="1" lg="1" class="sticky max-height-100">
-        <v-btn @click="previous" class="vertical-center left-50">Previous</v-btn>
+        <v-icon @click="previous" class="vertical-center left-50">mdi-open-in-new</v-icon>
       </v-col>
       <v-col xs="10" sm="10" md="10" lg="10" offset-xs="1" offset-sm="1" offset-md="1" offset-lg="1" offset-xl="1">          
         <v-calendar
@@ -21,7 +21,8 @@
         </v-calendar>
       </v-col>
       <v-col xs="1" sm="1" md="1" lg="1" class="sticky max-height-100 right-0">
-        <v-btn @click="next" class="vertical-center left-50">Next</v-btn>
+        <!-- <v-btn @click="next" class="vertical-center left-50">Next</v-btn> -->
+        <v-icon @click="next" class="vertical-center left-50">mdi-open-in-new</v-icon>
       </v-col>
 
     </v-row>
