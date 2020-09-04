@@ -60,7 +60,7 @@ def download_file(link):
         filename += '.pdf'
     return filename
 
-def pdf_to_csv(input_file, output_file='schedule.csv'):
+def pdf_to_csv(input_file, output_file='csv/schedule.csv'):
     tab.convert_into(input_file, output_file, output_format='csv', pages='all')
     return output_file
 
@@ -238,7 +238,7 @@ def main():
     return schedules
 
 def temp_main(temp_courses):
-    full_schedule = read_csv('schedule.csv')
+    full_schedule = read_csv('csv/schedule.csv')
     filtered_schedule = filter_schedule(full_schedule, temp_courses, semester)
 
     classes = generate_groups_for_combinations(filtered_schedule)
