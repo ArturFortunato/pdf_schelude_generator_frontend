@@ -55,7 +55,7 @@ export default {
     },
     mounted () {
         axios
-        .post('http://127.0.0.1:5000/schedule',  
+        .post('https://schedule-generator-backend.herokuapp.com/schedule',  
             {courses: this.courses}, 
             {headers: {'Content-type': 'application/json'}}
         )
