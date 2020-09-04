@@ -1,2 +1,24 @@
-# pdf_to_csv_schelude
-Reads a table in a pdf file, converts it to json and generates a schedule for the selected courses
+# pdf_to_chedule
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
